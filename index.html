@@ -1,0 +1,324 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Kabar61</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Public+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: portal berita satu kolom artikel + sidebar di desktop, menumpuk di HP */
+:root {
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --ink: #1a1a1a;
+  --muted: #666b73;
+  --line: #e2e4e8;
+  --soft: #f2f3f5;
+  --brand: #d71920;
+  --brand-ink: #ffffff;
+  --link: #1a5fb4;
+  --warm: #d9480f;
+  --font-display: "Bricolage Grotesque", "Trebuchet MS", Arial, sans-serif;
+  --font-body: "Public Sans", "Segoe UI", Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink); font: 400 16px/1.7 var(--font-body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 40px;
+}
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; }
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 3px solid var(--warm); outline-offset: 2px; }
+
+.wrap { max-width: 1040px; margin: 0 auto; }
+
+/* Masthead */
+.top { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 0; font-size: 12px; color: var(--muted); border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+.brandbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 0; flex-wrap: wrap; }
+.logo { font: 800 30px/1 var(--font-display); letter-spacing: -0.03em; color: var(--brand); display: flex; align-items: center; gap: 10px; }
+.logo small { font: 600 11px/1 var(--font-body); letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); border-left: 1px solid var(--line); padding-left: 10px; }
+.logo svg { width: 28px; height: 28px; flex: none; }
+nav.cats { display: flex; gap: 4px 18px; flex-wrap: wrap; font-size: 14px; font-weight: 500; }
+nav.cats a { color: var(--ink); padding: 4px 0; border-bottom: 2px solid transparent; }
+nav.cats a[aria-current] { color: var(--brand); border-color: var(--brand); }
+.ticker { background: var(--brand); color: var(--brand-ink); font-size: 13px; font-weight: 600; padding: 8px 14px; border-radius: 4px; display: flex; gap: 10px; align-items: baseline; }
+.ticker b { text-transform: uppercase; letter-spacing: 0.1em; font-size: 11px; }
+
+/* Grid */
+.grid { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 40px; padding-top: 28px; }
+@media (max-width: 860px) { .grid { grid-template-columns: minmax(0, 1fr); } }
+
+.crumbs { font-size: 13px; color: var(--muted); display: flex; gap: 8px; flex-wrap: wrap; }
+.crumbs span:not(:last-child)::after { content: "›"; margin-left: 8px; }
+h1 { font: 800 clamp(28px, 5.2vw, 42px)/1.12 var(--font-display); letter-spacing: -0.02em; margin: 14px 0 12px; text-wrap: balance; }
+.dek { font-size: 17px; color: var(--muted); margin: 0 0 20px; max-width: 62ch; }
+
+.meta { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: space-between; padding: 12px 0; border-block: 1px solid var(--line); margin-bottom: 22px; }
+.author { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--brand); color: var(--brand-ink); display: grid; place-items: center; font: 800 18px var(--font-display); flex: none; }
+.author b { display: block; font-size: 14px; line-height: 1.3; }
+.author span { font-size: 12px; color: var(--muted); }
+.share { display: flex; align-items: center; gap: 8px; }
+.share .chip { width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); display: grid; place-items: center; }
+.share .chip svg { width: 18px; height: 18px; fill: var(--ink); }
+.copy { background: var(--warm); color: #fff; border: 0; border-radius: 999px; padding: 9px 16px; font-weight: 600; font-size: 13px; }
+.count { text-align: center; line-height: 1.1; font-size: 12px; color: var(--muted); }
+.count b { display: block; font: 800 22px var(--font-display); color: var(--ink); }
+
+/* Photo */
+figure { margin: 0 0 24px; }
+.photo { position: relative; aspect-ratio: 16 / 10; max-width: 100%; border-radius: 8px; overflow: hidden; background: var(--soft); border: 1px solid var(--line); }
+.photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.photo .empty { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; padding: 20px; }
+.photo .empty svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.photo .empty div { position: relative; display: grid; gap: 10px; justify-items: center; }
+.photo .empty p { margin: 0; font-weight: 600; max-width: 28ch; line-height: 1.4; }
+.pick { background: var(--brand); color: var(--brand-ink); border: 0; border-radius: 999px; padding: 10px 18px; font-weight: 600; }
+.swap { position: absolute; right: 12px; bottom: 12px; background: rgba(20,12,14,.72); color: #fff; border: 0; border-radius: 6px; padding: 7px 12px; font-size: 13px; }
+figcaption { font-size: 13px; color: var(--muted); padding: 10px 4px 0; border-bottom: 1px solid var(--line); padding-bottom: 12px; }
+
+/* Body */
+.body p { margin: 0 0 18px; max-width: 66ch; }
+.body .lead::first-line { font-weight: 600; }
+.body .lead b.src { color: var(--brand); font-weight: 800; }
+.body h2 { font: 800 24px/1.2 var(--font-display); letter-spacing: -0.01em; margin: 32px 0 12px; text-wrap: balance; }
+blockquote { margin: 26px 0; padding: 4px 0 4px 20px; border-left: 4px solid var(--brand); max-width: 60ch; }
+blockquote p { font: 700 21px/1.4 var(--font-display); margin: 0 0 6px; }
+blockquote cite { font-size: 13px; color: var(--muted); font-style: normal; }
+
+.stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: 8px; background: var(--surface); margin: 26px 0; max-width: 340px; }
+.stats div { padding: 14px 16px; }
+.stats div + div { border-left: 1px solid var(--line); }
+.stats b { display: block; font: 800 30px/1.1 var(--font-display); color: var(--brand); font-variant-numeric: tabular-nums; }
+.stats span { font-size: 12px; color: var(--muted); }
+
+.box { border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 18px; margin: 28px 0; max-width: 520px; }
+.box h3 { margin: 0 0 12px; font: 800 17px/1.3 var(--font-display); }
+.opt { display: block; width: 100%; text-align: left; background: var(--soft); border: 1px solid var(--line); border-radius: 6px; padding: 10px 14px; margin-bottom: 8px; position: relative; overflow: hidden; }
+.opt .fill { position: absolute; inset: 0 auto 0 0; width: 0; background: var(--brand); opacity: .18; transition: width .5s ease; }
+.opt span { position: relative; display: flex; justify-content: space-between; gap: 12px; }
+.note { font-size: 13px; color: var(--muted); margin: 8px 0 0; min-height: 1.4em; }
+
+.comments { display: grid; gap: 14px; margin: 0; padding: 0; list-style: none; max-width: 60ch; }
+.comments li { display: grid; grid-template-columns: 36px minmax(0, 1fr); gap: 12px; }
+.comments .avatar { width: 36px; height: 36px; font-size: 14px; background: var(--soft); color: var(--brand); }
+.comments b { font-size: 14px; }
+.comments p { margin: 0; font-size: 15px; }
+
+.letter { background: var(--soft); border-radius: 8px; padding: 22px 22px 18px; margin: 34px 0 10px; max-width: 62ch; }
+.letter h2 { margin-top: 0; }
+.letter p { margin-bottom: 14px; }
+.letter .sign { font: 700 18px var(--font-display); color: var(--brand); margin: 0; }
+
+/* Sidebar */
+aside { min-width: 0; display: grid; gap: 28px; align-content: start; }
+.ad { border: 1px dashed var(--line); border-radius: 8px; padding: 18px; text-align: center; font-size: 13px; color: var(--muted); }
+.ad small { display: block; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 6px; }
+.ad b { display: block; font: 800 20px/1.2 var(--font-display); color: var(--ink); margin-bottom: 4px; }
+.side h3 { font: 800 13px var(--font-body); letter-spacing: .12em; text-transform: uppercase; color: var(--brand); border-bottom: 2px solid var(--brand); padding-bottom: 8px; margin: 0 0 6px; }
+.side ol { list-style: none; margin: 0; padding: 0; }
+.side li { padding: 12px 0; border-bottom: 1px solid var(--line); font-weight: 600; line-height: 1.4; font-size: 15px; }
+.side li small { display: block; font-weight: 400; color: var(--muted); font-size: 12px; margin-top: 2px; }
+
+footer { margin-top: 48px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
+footer b { color: var(--ink); }
+
+.toast { position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); transform: translate(-50%, 20px); background: var(--ink); color: var(--bg); padding: 10px 18px; border-radius: 999px; font-size: 14px; opacity: 0; pointer-events: none; transition: .25s; }
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+@media (prefers-reduced-motion: reduce) { .opt .fill, .toast { transition: none; } }
+</style>
+
+<div class="wrap">
+  <div class="top">
+    <span id="tgl">Sabtu, 17 Oktober 2026</span>
+    <span>Edisi Dua Bulan</span>
+  </div>
+
+  <div class="brandbar">
+    <div class="logo">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 28S3 20 3 11.5C3 7.4 6 5 9.3 5c2.7 0 5 1.6 6.7 4 1.7-2.4 4-4 6.7-4C26 5 29 7.4 29 11.5 29 20 16 28 16 28z" fill="currentColor"/></svg>
+      Kabar61 <small>Berita Cinta</small>
+    </div>
+    <nav class="cats" aria-label="Kategori">
+      <a href="#" aria-current="page">Gosip</a>
+      <a href="#">Asmara</a>
+      <a href="#">Mensiversary</a>
+      <a href="#">Kuliner Berdua</a>
+      <a href="#">Rindu</a>
+    </nav>
+  </div>
+
+  <div class="ticker"><b>Breaking</b> Hari ke-61: Eden dan Asmara masih bersama, redaksi tidak kaget.</div>
+
+  <div class="grid">
+    <main>
+      <div class="crumbs" style="margin-top:4px"><span>Beranda</span><span>Gosip</span><span>Asmara</span></div>
+      <h1>Eden dan Asmara Dikabarkan Pacaran, Sudah Resmi Dua Bulan?</h1>
+      <p class="dek">Pasangan yang dikabarkan dekat sejak Agustus ini kembali jadi sorotan. Apakah hubungan mereka benar-benar resmi? Redaksi menelusuri.</p>
+
+      <div class="meta">
+        <div class="author">
+          <div class="avatar" aria-hidden="true">R</div>
+          <div><b>Redaksi Kabar61</b><span>Terbit 17 Oktober 2026, 00.00 WIB</span></div>
+        </div>
+        <div class="share">
+          <span class="chip" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M13.5 21v-7.5H16l.5-3h-3V8.7c0-.9.3-1.5 1.6-1.5h1.5V4.5c-.3 0-1.2-.1-2.2-.1-2.3 0-3.9 1.400-3.9 4v2.100H8v3h2.500V21z"/></svg></span>
+          <span class="chip" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M17.800 3h3l-6.600 7.500L22 21h-6.100l-4.800-6.200L5.600 21h-3l7.100-8.100L2.200 3h6.200l4.300 5.700zm-1 16.200h1.700L7.400 4.700H5.600z"/></svg></span>
+          <button class="copy" id="copy" type="button">Salin Tautan</button>
+          <div class="count"><span>Dibagikan</span><b>2</b></div>
+        </div>
+      </div>
+
+      <figure>
+        <div class="photo" id="photo">
+          <div class="empty" id="empty">
+            <svg viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <rect width="160" height="100" fill="var(--soft)"/>
+              <g fill="var(--brand)" opacity=".16">
+                <path d="M20 30s-9-5.500-9-11.500C11 15.700 13 14 15.300 14c1.900 0 3.500 1.100 4.700 2.800C21.200 15.100 22.800 14 24.700 14 27 14 29 15.700 29 18.500 29 24.500 20 30 20 30z"/>
+                <path d="M130 84s-12-7.300-12-15.300c0-3.700 2.700-6 5.700-6 2.500 0 4.700 1.500 6.300 3.700 1.600-2.200 3.800-3.700 6.300-3.700 3 0 5.700 2.300 5.700 6C142 76.700 130 84 130 84z"/>
+                <path d="M92 22s-7-4.300-7-9c0-2.200 1.600-3.500 3.300-3.500 1.500 0 2.800.9 3.700 2.200.9-1.300 2.200-2.200 3.700-2.200 1.700 0 3.300 1.300 3.300 3.500 0 4.700-7 9-7 9z"/>
+              </g>
+            </svg>
+            <div>
+              <p>Pasang foto kalian berdua di sini</p>
+              <button class="pick" id="pick" type="button">Pilih foto</button>
+            </div>
+          </div>
+          <img id="img" alt="Eden dan Asmara" hidden>
+          <button class="swap" id="swap" type="button" hidden>Ganti foto</button>
+        </div>
+        <input type="file" id="file" accept="image/*" hidden>
+        <figcaption>Eden dan Asmara dikabarkan merayakan dua bulan kebersamaan. Apakah mereka kini pasangan resmi? Jawabannya ada di bawah.</figcaption>
+      </figure>
+
+      <div class="body">
+        <p class="lead"><b class="src">Kabar61, Di Mana Saja</b> – Kabar kedekatan Eden dan Asmara kembali menguat pada 17 Oktober 2026. Keduanya bersama sejak 17 Agustus 2026 dan kini genap dua bulan.</p>
+        <p>Sebelumnya beredar dugaan bahwa mereka hanya dekat biasa. Redaksi memastikan dugaan itu keliru. Hubungan Eden dan Asmara resmi, hangat, dan masih berjalan.</p>
+
+        <h2>Dua Bulan, 61 Hari, dan Masih Betah</h2>
+        <p>Dihitung dari 17 Agustus, sudah 61 hari terlewati. Menurut pengamat internal kami, angka itu akan terus bertambah dari hari ke hari.</p>
+
+        <div class="stats" role="group" aria-label="Statistik hubungan">
+          <div><b>2</b><span>bulan</span></div>
+          <div><b>61</b><span>hari</span></div>
+        </div>
+
+        <h2>Sumber Terdekat Membenarkan</h2>
+        <p>Sumber yang paling dekat dengan Eden menyebut dirinya sering senyum-senyum sendiri saat membuka ponsel. Penyebabnya diduga satu nama: Asmara.</p>
+        <blockquote>
+          <p>“Yeah, it's official. These two months flew by way faster than I thought and I'm still all in.”</p>
+          <cite>Eden, saat dimintai keterangan oleh redaksi</cite>
+        </blockquote>
+        <p>Hingga berita ini diturunkan, tidak ditemukan tanda-tanda keduanya akan berhenti. Redaksi justru menerima laporan bahwa rencana untuk bulan ketiga sudah mulai dibicarakan.</p>
+
+        <div class="box">
+          <h3>Jajak Pendapat: Apakah mereka pasangan resmi?</h3>
+          <button class="opt" type="button" data-v="yes"><i class="fill"></i><span>Resmi dan makin kompak <b class="pct">–</b></span></button>
+          <button class="opt" type="button" data-v="no"><i class="fill"></i><span>Cuma teman dekat <b class="pct">–</b></span></button>
+          <p class="note" id="note">Pilih satu jawaban.</p>
+        </div>
+
+        <h2>Kata Warganet</h2>
+        <ul class="comments">
+          <li><div class="avatar" aria-hidden="true">N</div><div><b>@netizen_baper</b><p>Langgeng terus ya, jangan lupa traktir bakso.</p></div></li>
+          <li><div class="avatar" aria-hidden="true">K</div><div><b>@kabar_kampus</b><p>EDARA CAHAYA ASIA 💜💜💜💜💜 JAYA JAYA JAYA!!!!!!!!</p></div></li>
+          <li><div class="avatar" aria-hidden="true">S</div><div><b>@saksi_mata</b><p>Dari jauh kelihatan bahagia banget. Resmi, saya yakin.</p></div></li>
+        </ul>
+
+        <section class="letter">
+          <h2>Catatan Redaksi</h2>
+          <p>Di luar gaya berita ini, ada satu hal yang ingin disampaikan langsung.</p>
+          <p>Asmara, terima kasih sudah jadi alasan dua bulan ini terasa ringan. Terima kasih sudah sabar, sudah mau cerita, dan sudah mau tertawa bareng aku. Semoga bulan ketiga, keempat, dan seterusnya kita lewati bersama.</p>
+          <p>Selamat tanggal 17 yang kedua, Sayang.</p>
+          <p class="sign">– Eden</p>
+        </section>
+      </div>
+    </main>
+
+    <aside>
+      <div class="ad"><small>Iklan</small><b>Promo Rindu</b>Gratis peluk untuk pembelian sepuluh pesan manis.</div>
+      <div class="side">
+        <h3>Berita Terkait</h3>
+        <ol>
+          <li>Pasangan Ini Rayakan Dua Bulan, Warganet: “Manis Banget” <small>Asmara · 2 jam lalu</small></li>
+          <li>Tanggal 17 Resmi Jadi Hari Penting Versi Dua Orang <small>Mensiversary · 5 jam lalu</small></li>
+          <li>Mengapa 61 Hari Bisa Terasa Sangat Singkat? <small>Rindu · Kemarin</small></li>
+          <li>Rencana Makan Berdua Bocor, Menu Masih Dirahasiakan <small>Kuliner Berdua · Kemarin</small></li>
+          <li>Ponsel Eden Dikabarkan Penuh Pesan dari Satu Nama <small>Gosip · 2 hari lalu</small></li>
+        </ol>
+      </div>
+    </aside>
+  </div>
+
+  <footer>
+    <b>Kabar61</b> adalah situs berita fiktif, dibuat dengan cinta untuk Asmara pada perayaan bulan ke-2, 17 Oktober 2026.
+  </footer>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var toastEl = $('toast'), tt;
+  function toast(msg) {
+    toastEl.textContent = msg; toastEl.classList.add('show');
+    clearTimeout(tt); tt = setTimeout(function () { toastEl.classList.remove('show'); }, 2000);
+  }
+
+  /* Foto: dikecilkan lalu disimpan di browser pembuka halaman */
+  var KEY = 'kabar-hati-foto';
+  function showPhoto(src) {
+    $('img').src = src; $('img').hidden = false;
+    $('empty').hidden = true; $('swap').hidden = false;
+  }
+  try { var saved = localStorage.getItem(KEY); if (saved) showPhoto(saved); } catch (e) {}
+
+  $('pick').onclick = $('swap').onclick = function () { $('file').click(); };
+  $('file').onchange = function () {
+    var f = this.files && this.files[0]; if (!f) return;
+    var r = new FileReader();
+    r.onload = function () {
+      var im = new Image();
+      im.onload = function () {
+        var max = 1200, s = Math.min(1, max / Math.max(im.width, im.height));
+        var c = document.createElement('canvas');
+        c.width = Math.round(im.width * s); c.height = Math.round(im.height * s);
+        c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
+        var url = c.toDataURL('image/jpeg', 0.82);
+        showPhoto(url);
+        try { localStorage.setItem(KEY, url); } catch (e) {}
+      };
+      im.src = r.result;
+    };
+    r.readAsDataURL(f);
+  };
+
+  /* Salin tautan */
+  $('copy').onclick = function () {
+    var done = function () { toast('Tautan disalin'); };
+    var fail = function () { toast('Salin manual dari bilah alamat ya'); };
+    try { navigator.clipboard.writeText(location.href).then(done, fail); } catch (e) { fail(); }
+  };
+
+  /* Jajak pendapat */
+  var opts = document.querySelectorAll('.opt'), voted = false;
+  Array.prototype.forEach.call(opts, function (b) {
+    b.onclick = function () {
+      if (voted) return; voted = true;
+      var yes = b.getAttribute('data-v') === 'yes';
+      Array.prototype.forEach.call(opts, function (o) {
+        var isYes = o.getAttribute('data-v') === 'yes';
+        o.querySelector('.pct').textContent = isYes ? '100%' : '0%';
+        o.querySelector('.fill').style.width = isYes ? '100%' : '0%';
+      });
+      $('note').textContent = yes
+        ? 'Redaksi setuju. Hasil final, tidak bisa digugat.'
+        : 'Jawaban ditolak redaksi. Hasil tetap 100% resmi.';
+    };
+  });
+})();
+</script>
+
+</body></html>
